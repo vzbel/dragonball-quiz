@@ -1,7 +1,21 @@
 import './App.css';
-import Header from "./components/Header.jsx"; 
+import { useState, useEffect } from "react";
+import Header from "./components/Header.jsx";
+import characterService from './services/characters.js'; 
 
 const App = () => {
+  // Dragon Ball API provides the characters, metadata, and 
+  // pagination info in an object.
+  const [characters, setCharacters] = useState({});
+
+  useEffect(() => {
+    characterService
+      .getAll()
+      .then((data) => {
+        setCharacters(data);
+      });
+  }, []);
+
   return (
     <>
       <Header 
