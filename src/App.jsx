@@ -34,6 +34,7 @@ const App = () => {
             alt: characters.items[index].affiliation
           }}
           question={"Who is this character?"}
+          answer={characters.items[index].name}
         />
       }
     </>
