@@ -1,0 +1,11 @@
+button {
+    border-radius: 5px;
+    border: 1px solid grey;
+    background-color: var(--dark);
+    color: white;
+    padding: 16px 20px;
+}
+
+button:hover{
+    outline: 1px solid magenta;
+}

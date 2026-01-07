@@ -1,0 +1,12 @@
+.toolbar {
+    margin-top: 24px;
+    max-width: 200px;
+    margin-inline: auto;
+    justify-content: center;
+    gap: 16px;
+    padding: 8px;
+}
+
+.toolbar > button:hover{
+    transform: scale(1.04);
+}

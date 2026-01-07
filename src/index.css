@@ -28,6 +28,11 @@ button {
   cursor: pointer;
 }
 
-img{
+img,
+button{
   display: block;
+}
+
+.flex {
+  display: flex;
 }

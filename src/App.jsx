@@ -2,6 +2,7 @@ import './App.css';
 import { useState, useEffect } from "react";
 import Header from "./components/Header.jsx";
 import FlashCard from "./components/Flashcard.jsx";
+import Toolbar from "./components/Toolbar.jsx";
 import characterService from './services/characters.js'; 
 
 const App = () => {
@@ -18,12 +19,30 @@ const App = () => {
       });
   }, []);
 
+  const handleBackward = () => {
+    const newIndex = (index > 0) ? (index - 1) : 0; 
+    setIndex(newIndex);
+  };
+
+  const handleForward = () => {
+    let newIndex = index + 1;
+    if(characters.items && 
+      newIndex === characters.items.length
+    ){
+      newIndex = index;
+    }
+    setIndex(newIndex);
+  };
+
   return (
     <>
       <Header title="Dragon Ball Quiz">
         <p>How big of a DB fan are you? 
         Test all your character knowledge here!</p>
-        <p>Number of Cards : {characters.items.length}</p>
+        {
+          characters.items &&
+          <p>Number of Cards : {characters.items.length}</p>
+        }
       </Header>
       {
         characters.items &&
@@ -37,6 +56,12 @@ const App = () => {
           answer={characters.items[index].name}
         />
       }
+
+      <Toolbar 
+        onForward={handleForward}
+        onBack={handleBackward}
+      />
+
     </>
   );
 };
