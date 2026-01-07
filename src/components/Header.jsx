@@ -1,10 +1,10 @@
 import "../styles/Header.css";
 
-const Header = ({ title, description }) => {
+const Header = ({ title, children }) => {
     return (
         <header>
             <h1>{title}</h1>
-            <p>{description}</p>
+            { children }
         </header>
     );
 };

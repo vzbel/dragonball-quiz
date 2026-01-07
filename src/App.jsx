@@ -20,11 +20,11 @@ const App = () => {
 
   return (
     <>
-      <Header 
-        title="Dragon Ball Quiz"
-        description="How big of a DB fan are you? 
-        Test all your character knowledge here!"
-      />
+      <Header title="Dragon Ball Quiz">
+        <p>How big of a DB fan are you? 
+        Test all your character knowledge here!</p>
+        <p>Number of Cards : {characters.items.length}</p>
+      </Header>
       {
         characters.items &&
         <FlashCard 
