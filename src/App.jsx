@@ -3,7 +3,8 @@ import { useState, useEffect } from "react";
 import Header from "./components/Header.jsx";
 import FlashCard from "./components/Flashcard.jsx";
 import Toolbar from "./components/Toolbar.jsx";
-import characterService from './services/characters.js'; 
+import characterService from './services/characters.js';
+import kiParser from "./services/kiparser.js"; 
 
 const App = () => {
   // Dragon Ball API provides the characters, metadata, and 
@@ -56,6 +57,7 @@ const App = () => {
             }}
             question={"Who is this character?"}
             answer={characters.items[index].name}
+            bgColor={kiParser.getColor(characters.items[index].ki)}
           />
           <Toolbar 
             onForward={handleForward}
