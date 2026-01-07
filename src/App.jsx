@@ -10,6 +10,7 @@ const App = () => {
   // pagination info in an object.
   const [characters, setCharacters] = useState({});
   const [index, setIndex] = useState(0);
+  const [history, setHistory] = useState([]);
 
   useEffect(() => {
     characterService
@@ -20,17 +21,17 @@ const App = () => {
   }, []);
 
   const handleBackward = () => {
-    const newIndex = (index > 0) ? (index - 1) : 0; 
+    const newIndex = (history.length > 0) ? (history[history.length - 1]) : index; 
+    setHistory(history.filter((h, hIndex) =>  hIndex !== history.length - 1));
     setIndex(newIndex);
   };
 
   const handleForward = () => {
-    let newIndex = index + 1;
-    if(characters.items && 
-      newIndex === characters.items.length
-    ){
-      newIndex = index;
-    }
+    // Exclude current character from random choice
+    const candidates = characters.items.filter((h, hIndex) => hIndex !== index);
+    const candidate = candidates[(Math.floor(Math.random() * (candidates.length - 1)))];
+    const newIndex = characters.items.findIndex((c) => c == candidate);
+    setHistory([...history, index]);
     setIndex(newIndex);
   };
 
@@ -46,22 +47,22 @@ const App = () => {
       </Header>
       {
         characters.items &&
-        <FlashCard 
-          key={characters.items[index].id}
-          image={{
-            url: characters.items[index].image,
-            alt: characters.items[index].affiliation
-          }}
-          question={"Who is this character?"}
-          answer={characters.items[index].name}
-        />
+        <>
+          <FlashCard 
+            key={characters.items[index].id}
+            image={{
+              url: characters.items[index].image,
+              alt: characters.items[index].affiliation
+            }}
+            question={"Who is this character?"}
+            answer={characters.items[index].name}
+          />
+          <Toolbar 
+            onForward={handleForward}
+            onBack={handleBackward}
+          />
+        </>
       }
-
-      <Toolbar 
-        onForward={handleForward}
-        onBack={handleBackward}
-      />
-
     </>
   );
 };
