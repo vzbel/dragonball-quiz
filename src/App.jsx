@@ -17,6 +17,10 @@ const App = () => {
   const [answer, setAnswer] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isRandomized, setIsRandomized] = useState(false);
+  const [streak, setStreak] = useState({
+    current: 0,
+    longest: 0
+  });
 
   useEffect(() => {
     characterService
@@ -63,13 +67,25 @@ const App = () => {
     setIsSubmitted(false);
   };
 
-  const checkCorrectness = (answer) => {
-    return answer.trim().toLowerCase() === characters.items[index].name.toLowerCase();
+  const checkCorrectness = (ans) => {
+    return ans.trim().toLowerCase() === characters.items[index].name.toLowerCase();
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsSubmitted(true);
+    if(checkCorrectness(answer)){
+      const newStreak = streak.current + 1;
+      setStreak({
+        current: newStreak,
+        longest: (newStreak > streak.longest) ? newStreak : streak.longest
+      });
+    }else{
+      setStreak({
+        ...streak,
+        current: 0
+      });
+    }
   };
 
   const handleShuffle = () => {
@@ -84,7 +100,14 @@ const App = () => {
         Test all your character knowledge here!</p>
         {
           characters.items &&
-          <p>Number of Cards : {characters.items.length}</p>
+          <>
+            <p>Current Streak: {streak.current},
+            Longest Streak: {streak.longest}
+            </p> 
+            <p>
+            Number of Cards : {characters.items.length}
+            </p>
+          </>
         }
       </Header>
       {
