@@ -2,4 +2,11 @@
     margin-top: 16px;
     max-width: fit-content;
     margin-inline: auto;
+    gap: 16px;
+}
+
+.no-cards {
+    max-width: fit-content;
+    margin-inline: auto;
+    margin-top: 64px;
 }

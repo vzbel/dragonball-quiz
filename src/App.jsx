@@ -93,6 +93,16 @@ const App = () => {
     setHistory([]);
   };
 
+  const markMastered = () => {
+    setCharacters({
+      ...characters,  
+      items: characters.items.filter((c) => (c.name !== characters.items[index].name))
+    });
+    resetForm();
+    setHistory([]);
+    setIndex(0);
+  };
+
   return (
     <>
       <Header title="Dragon Ball Quiz">
@@ -111,7 +121,8 @@ const App = () => {
         }
       </Header>
       {
-        characters.items &&
+        characters.items && characters.items.length > 0 
+        ? 
         <>
           <FlashCard 
             key={characters.items[index].id}
@@ -140,14 +151,21 @@ const App = () => {
             isBackDisabled={isRandomized ? (history.length === 0) : index === 0}
           />
 
-          <div className="shuffle-container">
+          <div className="shuffle-container flex">
             <Button 
               text={isRandomized ? "Unshuffle" : "Shuffle"} 
               onClick={handleShuffle}
               isDisabled={false}
             />
+            <Button 
+              text="Mark Mastered"
+              onClick={markMastered}
+              isDisabled={false}
+            />
           </div>
         </>
+        :
+        <p className="no-cards">No cards to show...</p>
       }
 
     </>
