@@ -2,6 +2,7 @@ import './App.css';
 import { useState, useEffect } from "react";
 import Header from "./components/Header.jsx";
 import FlashCard from "./components/Flashcard.jsx";
+import AnswerForm from "./components/AnswerForm.jsx";
 import Toolbar from "./components/Toolbar.jsx";
 import characterService from './services/characters.js';
 import kiParser from "./services/kiparser.js"; 
@@ -12,6 +13,8 @@ const App = () => {
   const [characters, setCharacters] = useState({});
   const [index, setIndex] = useState(0);
   const [history, setHistory] = useState([]);
+  const [answer, setAnswer] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
     characterService
@@ -25,6 +28,7 @@ const App = () => {
     const newIndex = (history.length > 0) ? (history[history.length - 1]) : index; 
     setHistory(history.filter((h, hIndex) =>  hIndex !== history.length - 1));
     setIndex(newIndex);
+    resetForm();
   };
 
   const handleForward = () => {
@@ -34,6 +38,26 @@ const App = () => {
     const newIndex = characters.items.findIndex((c) => c == candidate);
     setHistory([...history, index]);
     setIndex(newIndex);
+    resetForm();
+  };
+
+  const handleAnswerChange = (e) => {
+    setAnswer(e.target.value);
+    setIsSubmitted(false);
+  };
+
+  const resetForm = () => {
+    setAnswer("");
+    setIsSubmitted(false);
+  };
+
+  const checkCorrectness = (answer) => {
+    return answer.trim().toLowerCase() === characters.items[index].name.toLowerCase();
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsSubmitted(true);
   };
 
   return (
@@ -58,13 +82,24 @@ const App = () => {
             question={"Who is this character?"}
             answer={characters.items[index].name}
             bgColor={kiParser.getColor(characters.items[index].ki)}
+            isSubmitted={isSubmitted}
           />
+
+          <AnswerForm
+            answer={answer}
+            isSubmitted={isSubmitted}
+            isCorrect={checkCorrectness}
+            onAnswerChange={handleAnswerChange}
+            onSubmit={handleSubmit}
+          />
+
           <Toolbar 
             onForward={handleForward}
             onBack={handleBackward}
           />
         </>
       }
+
     </>
   );
 };

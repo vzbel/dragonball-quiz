@@ -29,7 +29,8 @@ button {
 }
 
 img,
-button{
+button,
+input{
   display: block;
 }
 
