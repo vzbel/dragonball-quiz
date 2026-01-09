@@ -6,6 +6,7 @@ import AnswerForm from "./components/AnswerForm.jsx";
 import Toolbar from "./components/Toolbar.jsx";
 import characterService from './services/characters.js';
 import kiParser from "./services/kiparser.js"; 
+import Button from './components/Button.jsx';
 
 const App = () => {
   // Dragon Ball API provides the characters, metadata, and 
@@ -15,6 +16,7 @@ const App = () => {
   const [history, setHistory] = useState([]);
   const [answer, setAnswer] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isRandomized, setIsRandomized] = useState(false);
 
   useEffect(() => {
     characterService
@@ -25,17 +27,27 @@ const App = () => {
   }, []);
 
   const handleBackward = () => {
-    const newIndex = (history.length > 0) ? (history[history.length - 1]) : index; 
-    setHistory(history.filter((h, hIndex) =>  hIndex !== history.length - 1));
+    let newIndex;
+    if(isRandomized){
+      newIndex = (history.length > 0) ? (history[history.length - 1]) : index;
+      setHistory(history.filter((h, hIndex) =>  hIndex !== history.length - 1));
+    }else{
+      newIndex = index - 1;
+    }
     setIndex(newIndex);
     resetForm();
   };
 
   const handleForward = () => {
-    // Exclude current character from random choice
-    const candidates = characters.items.filter((h, hIndex) => hIndex !== index);
-    const candidate = candidates[(Math.floor(Math.random() * (candidates.length - 1)))];
-    const newIndex = characters.items.findIndex((c) => c == candidate);
+    let newIndex;
+    if(isRandomized){
+      // Exclude current character from random choice
+      const candidates = characters.items.filter((h, hIndex) => hIndex !== index);
+      const candidate = candidates[(Math.floor(Math.random() * (candidates.length - 1)))];
+      newIndex = characters.items.findIndex((c) => c == candidate);
+    }else {
+      newIndex = index + 1;
+    }
     setHistory([...history, index]);
     setIndex(newIndex);
     resetForm();
@@ -58,6 +70,11 @@ const App = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsSubmitted(true);
+  };
+
+  const handleShuffle = () => {
+    setIsRandomized(!isRandomized);
+    setHistory([]);
   };
 
   return (
@@ -96,7 +113,17 @@ const App = () => {
           <Toolbar 
             onForward={handleForward}
             onBack={handleBackward}
+            isForwardDisabled={isRandomized ? false : (index === characters.items.length - 1)}
+            isBackDisabled={isRandomized ? (history.length === 0) : index === 0}
           />
+
+          <div className="shuffle-container">
+            <Button 
+              text={isRandomized ? "Unshuffle" : "Shuffle"} 
+              onClick={handleShuffle}
+              isDisabled={false}
+            />
+          </div>
         </>
       }
 

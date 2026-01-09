@@ -37,3 +37,13 @@ input{
 .flex {
   display: flex;
 }
+
+.disabled-btn {
+  outline: none;
+  border: 1px solid black;
+  color: grey;
+}
+
+.disabled-btn:hover{
+  outline: none;
+}
